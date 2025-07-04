@@ -1,0 +1,29 @@
+/* Modal Header: soft gradient blue for visual appeal */
+.modal-header {
+  background: linear-gradient(135deg, #dbeafe, #f0f4ff); /* subtle blue gradient */
+  padding: 0.7rem 1rem;
+  font-weight: 600;
+  border-bottom: 1px groove #dee2e6;
+  align-items: center;
+}
+
+/* Modal Footer: complementary light gray with spacing */
+.modal-footer {
+  background-color: #f2f4f4;
+  padding: 0.5rem 1rem;
+  border-top: 1px groove #dee2e6;
+  /* justify-content: flex-end; */
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.modal-header .btn.btn-danger{
+    outline: none !important;
+    padding: .2rem .6rem;
+}
+
+@media (max-width: 576px) {
+  .modal-header,
+  .modal-footer {
+    padding: 0.5rem 0.75rem;
+  }
+}
