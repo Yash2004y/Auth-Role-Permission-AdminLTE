@@ -21,7 +21,7 @@
 
 # Auth Role Permission
 
-This is a Laravel-based application that implements a full-featured authentication system with user **roles** and **permissions** management.
+This is a Laravel-based application that implements a full-featured authentication system with user **roles** and **permissions** management, styled with **AdminLTE**.
 
 It is ideal for applications that need access control and user-level security with fine-grained permission handling.
 
@@ -29,30 +29,27 @@ It is ideal for applications that need access control and user-level security wi
 
 ## Features
 
-- User registration & authentication
-- Role-based access control
-- Permission management
-- Dynamic permission assignment to roles
-- Assign roles to users
-- Middleware protection based on roles/permissions
-- Laravel Blade support with `@can` and custom directives
-- Admin panel (optional) to manage users/roles/permissions
+- User authentication (login, register, password reset)
+- Role-based access control (RBAC)
+- Permission management via Spatie package
+- Assign multiple roles and permissions to users
+- Middleware protection with roles/permissions
+- Blade directives for authorization (`@can`, custom directives)
+- AdminLTE integration for UI
 
 ---
 
 ## Technologies Used
 
-- Laravel Framework (v10+)
-- Laravel Breeze / Jetstream / Fortify (depending on your stack)
-- Spatie Laravel Permission Package
-- MySQL or any Laravel-supported DB
-- Bootstrap or Tailwind CSS (optional UI stack)
-
+- **Laravel Framework** `^12.0` — Modern PHP web application framework
+- **PHP** `^8.2` — Required runtime version
+- **Spatie Laravel Permission** `^6.19` — Role & permission management
+- **Yajra Laravel Datatables** `^12.3` — Server-side DataTables integration
 ---
 
 ## Installation
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/auth-role-permission.git
-   cd auth-role-permission
+   git clone https://github.com/Yash2004y/Auth-Role-Permission-AdminLTE.git
+   cd Auth-Role-Permission-AdminLTE
