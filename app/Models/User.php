@@ -15,7 +15,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable, HasRoles, CommonModelTrait;
 
     protected static $folder = "User Images";
-    protected static $disk = "public";
+
     /**
      * The attributes that are mass assignable.
      *
@@ -29,7 +29,12 @@ class User extends Authenticatable
         'image'
     ];
 
-
+     protected static function booted(): void
+    {
+        static::created(function (User $user) {
+            $user->update(['add_by' => auth()?->user()?->id]);
+        });
+    }
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -54,20 +59,20 @@ class User extends Authenticatable
     }
     public function getImageAttribute($fileName)
     {
-        return getFileFullPath($fileName, User::$folder, User::$disk);
+        return getFileFullPath($fileName, User::$folder);
     }
     public function changeUserImage(UploadedFile $file)
     {
         // return $file->getClientOriginalName();
         // return "hi";
         $this->deleteImage();
-        $fileInfo = uploadFile($file, 'user_image_' . rand(1, 200) . $this->id, User::$folder, User::$disk);
+        $fileInfo = uploadFile($file, 'user_image_' . rand(1, 200) . $this->id, User::$folder);
         $this->update(['image' => $fileInfo["filename"]]);
     }
     public function deleteImage()
     {
         if (!empty($this->getRawOriginal("image"))) {
-            deleteFile($this->getRawOriginal("image"), User::$folder, User::$disk);
+            deleteFile($this->getRawOriginal("image"), User::$folder);
         }
     }
 }

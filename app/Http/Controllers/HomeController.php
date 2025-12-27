@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
+use App\Repository\PermissionRepository;
+use App\Repository\RoleRepository;
+use App\Repository\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Nette\Utils\ArrayList;
@@ -17,8 +20,14 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    private UserRepository $userRepository;
+    private RoleRepository $roleRepository;
+    private PermissionRepository $permissionRepository;
+    public function __construct(UserRepository $userRepository,RoleRepository $roleRepository,PermissionRepository $permissionRepository)
     {
+        $this->userRepository = $userRepository;
+        $this->roleRepository = $roleRepository;
+        $this->permissionRepository = $permissionRepository;
         $this->middleware('auth');
     }
 
@@ -38,7 +47,7 @@ class HomeController extends Controller
         $user = auth()->user();
         $counts=[];
         if($user->can('user-list')){
-            $listCount = User::count();
+            $listCount = this->userRepository->userCount();
             array_push($counts,[
                 'permission'=>'user-list',
                 'title'=>'Users',
@@ -48,7 +57,7 @@ class HomeController extends Controller
             ]);
         }
          if($user->can('role-list')){
-            $listCount = Role::count();
+            $listCount = $this->roleRepository->roleCount();
             array_push($counts,[
                 'permission'=>'role-list',
                 'title'=>'Roles',
@@ -58,7 +67,7 @@ class HomeController extends Controller
             ]);
         }
         if($user->can('permission-list')){
-            $listCount = Permission::count();
+            $listCount = $this->permissionRepository->permissionCount();
             array_push($counts,[
                 'permission'=>'permission-list',
                 'title'=>'Permissions',

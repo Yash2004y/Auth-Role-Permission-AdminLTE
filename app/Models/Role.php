@@ -9,7 +9,14 @@ class Role extends ModelsRole
 {
     use CommonModelTrait;
 
-    public function CreateBy(){
-        return $this->belongsTo(User::class,'add_by');
+    protected static function booted(): void
+    {
+        static::created(function (Role $user) {
+            $user->update(['add_by' => auth()?->user()?->id]);
+        });
+    }
+    public function CreateBy()
+    {
+        return $this->belongsTo(User::class, 'add_by');
     }
 }

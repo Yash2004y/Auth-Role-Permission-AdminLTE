@@ -19,8 +19,9 @@ if (!function_exists('uploadFile')) {
      *     extension: string
      * }
      */
-    function getFileFullPath($fileName, $folder, $disk = 'public')
+    function getFileFullPath($fileName, $folder)
     {
+        $disk = config("filesystems.default");
         if (empty($fileName)) {
             return null; // Optional: handle missing filename
         }
@@ -31,8 +32,10 @@ if (!function_exists('uploadFile')) {
         return Storage::disk($disk)->url($path);
     }
 
-    function deleteFile($fileName, $folder, $disk = 'public')
+    function deleteFile($fileName, $folder)
     {
+        $disk = config("filesystems.default");
+
         if (!empty($fileName)) {
             $path = config('constants.filehelper_config.upload_folder', 'uploads') . "/" . $folder . '/' . $fileName;
 
@@ -43,8 +46,10 @@ if (!function_exists('uploadFile')) {
 
         return false;
     }
-    function uploadFile(UploadedFile $file, string|null $fileName, string $folder = 'common', string $disk = 'public'): array
+    function uploadFile(UploadedFile $file, string|null $fileName, string $folder = 'common'): array
     {
+        $disk = config("filesystems.default");
+
         $extension = $file->getClientOriginalExtension();
         $mime = $file->getMimeType();
 

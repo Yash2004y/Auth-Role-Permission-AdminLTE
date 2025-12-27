@@ -2,6 +2,13 @@
 
 namespace App\Providers;
 
+use App\Interfaces\PermissionServiceInterface;
+use App\Interfaces\RoleServiceInterface;
+use App\Interfaces\UserServiceInterface;
+use App\Models\User;
+use App\Services\PermissionService;
+use App\Services\RoleService;
+use App\Services\UserService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
@@ -13,6 +20,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        app()->bind(UserServiceInterface::class,UserService::class);
+        app()->bind(RoleServiceInterface::class,RoleService::class);
+        app()->bind(PermissionServiceInterface::class,PermissionService::class);
         //
     }
 

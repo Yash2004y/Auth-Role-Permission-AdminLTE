@@ -16,32 +16,62 @@ class CustomBaseController extends Controller
         try {
             $result = $callback();
 
-            DB::commit();
+            if ($result['status']) {
+                DB::commit();
+            } else {
+                DB::rollBack();
+            }
 
-            return $result;
+            $statusCode = $result['statusCode'] ?? 200;
+            unset($result['statusCode']);
+            return response()->json($result, $statusCode);
         } catch (Exception $e) {
             DB::rollBack();
 
-            if(request()->wantsJson() || request()->ajax()){
+            if (request()->wantsJson() || request()->ajax()) {
                 return response()->json([
                     'status' => true,
                     'message' => $e->getMessage(),
                 ], 500);
-            }
-            else{
+            } else {
                 throw $e;
             }
         }
     }
 
-    protected function validateData($rules,$messages=[],callable|null $beforeReturnErrorFunction = null){
-        $validator = Validator::make(request()->all(),$rules,$messages);
-        if(!empty($beforeReturnErrorFunction)){
-            $beforeReturnErrorFunction($validator);
-        }
-        if($validator->fails()){
-            abort(sendError("Invalid input",$validator->errors(),false,422));
+    protected function handleException(callable $callback)
+    {
+
+        try {
+            $result = $callback();
+
+            $statusCode = $result['statusCode'] ?? 200;
+            unset($result['statusCode']);
+            return response()->json($result, $statusCode);
+        } catch (Exception $e) {
+
+            if (request()->wantsJson() || request()->ajax()) {
+                return response()->json([
+                    'status' => true,
+                    'message' => $e->getMessage(),
+                ], 500);
+            } else {
+                throw $e;
+            }
         }
     }
 
+    protected function validateData($rules, $messages = [], callable|null $beforeReturnErrorFunction = null)
+    {
+        $validator = Validator::make(request()->all(), $rules, $messages);
+        if (!empty($beforeReturnErrorFunction)) {
+            $beforeReturnErrorFunction($validator);
+        }
+        if ($validator->fails()) {
+            $errorData = sendError("Invalid input", $validator->errors(), false, 422);
+            unset($errorData['statusCode']);
+            $data = response()->json($errorData,422);
+            abort($data);
+        }
+    }
 }
